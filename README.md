@@ -23,12 +23,24 @@
 
 ## Features
 
+### Core Features
 ✨ **Real-time Detection** — Identify faces in live video streams  
-📸 **Image Processing** — Analyze faces in static images  
+� **Multi-Face Support** — Detect and recognize multiple people simultaneously  
+�📸 **Image Processing** — Analyze faces in static images with annotations  
 ⚡ **Zero Setup** — Models download automatically on first run  
 💪 **CPU-Only** — No GPU required  
 🔌 **Pure OpenCV** — No TensorFlow, no compilation, no complications  
-👥 **Multi-Face** — Detect and recognize multiple people simultaneously  
+
+### Enhanced Features
+🎨 **Beautiful UI** — Stylish bounding boxes with corner accents and color coding  
+📊 **Live Dashboard** — Real-time statistics panel with session metrics  
+📸 **Screenshot Capture** — Save snapshots instantly with `S` key  
+🎥 **Video Recording** — Record recognition sessions with `R` key  
+👁️ **Face Landmarks** — Visual facial feature points overlay  
+📈 **Confidence Meters** — Visual confidence bars for each detection  
+🔔 **Unknown Alerts** — Get notified when unknown persons are detected  
+⚙️ **Adjustable Settings** — Fine-tune detection thresholds on-the-fly  
+💾 **Auto-save Outputs** — Annotated images saved to `output/` directory  
 
 ## Requirements
 
@@ -73,16 +85,27 @@ Select your mode:
 
 ## Usage
 
-## Usage
-
 <details open>
-<summary><b>Real-time Webcam Recognition</b></summary>
+<summary><b>Real-time Webcam Recognition (Enhanced Mode)</b></summary>
 
 ```bash
 python main.py
 # Select option 1
-# Press 'q' to quit
 ```
+
+### Keyboard Controls
+
+| Key | Action |
+|-----|--------|
+| `Q` | Quit application |
+| `S` | Take screenshot (saved to `screenshots/`) |
+| `R` | Toggle video recording (saved to `recordings/`) |
+| `L` | Toggle face landmarks display |
+| `C` | Toggle confidence bars |
+| `T` | Toggle statistics panel |
+| `A` | Toggle unknown face alerts |
+| `+` | Increase detection threshold |
+| `-` | Decrease detection threshold |
 
 </details>
 
@@ -93,6 +116,18 @@ python main.py
 python main.py
 # Select option 2
 # Provide your image path
+# Annotated image saved to output/ directory
+```
+
+</details>
+
+<details>
+<summary><b>View Settings & Statistics</b></summary>
+
+```bash
+python main.py
+# Select option 3 for settings
+# Select option 4 for statistics
 ```
 
 </details>

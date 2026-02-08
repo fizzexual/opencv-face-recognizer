@@ -42,7 +42,12 @@ Thumbs.db
 # Project specific
 faces/
 models/
+screenshots/
+recordings/
+output/
 *.jpg
 *.jpeg
 *.png
+*.avi
+*.mp4
 !example.jpg
