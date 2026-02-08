@@ -30,43 +30,73 @@ class EmotionDetector:
         else:
             gray_face = face_roi
         
-        # Detect eyes
+        # Resize for better detection
+        gray_face = cv2.resize(gray_face, (200, 200))
+        
+        # Detect eyes with more lenient parameters
         eyes = self.eye_cascade.detectMultiScale(
             gray_face, 
-            scaleFactor=1.1, 
-            minNeighbors=5,
+            scaleFactor=1.05, 
+            minNeighbors=3,
+            minSize=(15, 15)
+        )
+        
+        # Detect smile with more sensitive parameters
+        smiles = self.smile_cascade.detectMultiScale(
+            gray_face,
+            scaleFactor=1.5,
+            minNeighbors=15,
             minSize=(20, 20)
         )
         
-        # Detect smile
-        smiles = self.smile_cascade.detectMultiScale(
-            gray_face,
-            scaleFactor=1.8,
-            minNeighbors=20,
-            minSize=(25, 25)
-        )
-        
-        # Calculate brightness (can indicate surprise/fear)
+        # Calculate brightness and contrast
         brightness = np.mean(gray_face)
+        contrast = np.std(gray_face)
         
-        # Simple rule-based emotion detection
+        # Analyze lower half of face for mouth/smile
+        lower_half = gray_face[100:, :]
+        lower_brightness = np.mean(lower_half)
+        
+        # Analyze upper half for eyes
+        upper_half = gray_face[:100, :]
+        upper_brightness = np.mean(upper_half)
+        
+        # More sophisticated emotion detection
         if len(smiles) > 0:
+            # Strong smile detected
             return "😊 Happy"
-        elif len(eyes) == 0:
-            return "😲 Surprised"
-        elif brightness < 80:
+        elif lower_brightness > upper_brightness + 10:
+            # Mouth area brighter (possible smile/open mouth)
+            return "😊 Happy"
+        elif len(eyes) < 2 and contrast > 40:
+            # Eyes not clearly visible, high contrast
+            return "😠 Angry"
+        elif brightness < 70:
+            # Very dark face (squinting/sad)
             return "😢 Sad"
-        elif brightness > 150:
+        elif len(eyes) == 0 or len(eyes) > 3:
+            # Eyes detection failed or too many (wide eyes)
             return "😲 Surprised"
+        elif contrast < 30:
+            # Low contrast (flat expression)
+            return "😐 Neutral"
         else:
-            # Use face aspect ratio for more emotions
+            # Check face proportions
             h, w = gray_face.shape
-            aspect_ratio = h / w if w > 0 else 1
             
-            if aspect_ratio > 1.3:
-                return "😮 Surprised"
-            elif aspect_ratio < 1.1:
-                return "😠 Angry"
+            # Analyze vertical thirds
+            top_third = gray_face[:66, :]
+            mid_third = gray_face[66:133, :]
+            bot_third = gray_face[133:, :]
+            
+            top_bright = np.mean(top_third)
+            mid_bright = np.mean(mid_third)
+            bot_bright = np.mean(bot_third)
+            
+            if bot_bright < mid_bright - 5:
+                return "😢 Sad"
+            elif bot_bright > mid_bright + 5:
+                return "😊 Happy"
             else:
                 return "😐 Neutral"
     

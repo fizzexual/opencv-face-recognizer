@@ -31,7 +31,7 @@ class FaceRecognition:
             'show_emotion': True,
             'alert_unknown': True,
             'detection_threshold': 0.5,
-            'recognition_threshold': 100
+            'recognition_threshold': 70  # Stricter! Lower = more strict
         }
         
         # Emotion detection (simple rule-based)
@@ -196,7 +196,7 @@ class FaceRecognition:
         combined = np.vstack([panel, frame])
         return combined
     
-    def draw_confidence_bar(self, frame, x, y, confidence, max_confidence=100):
+    def draw_confidence_bar(self, frame, x, y, confidence, max_confidence=120):
         """Draw confidence meter - Lower number = Better match!"""
         if not self.settings['show_confidence']:
             return
@@ -205,7 +205,7 @@ class FaceRecognition:
         bar_height = 10
         
         # Lower confidence = better match, so invert for display
-        # 0 = perfect match (100% fill), 100 = poor match (0% fill)
+        # 0 = perfect match (100% fill), 120 = poor match (0% fill)
         fill_width = int((1 - min(confidence, max_confidence) / max_confidence) * bar_width)
         
         # Background
@@ -277,9 +277,11 @@ class FaceRecognition:
         print("   T - Toggle Stats Panel")
         print("   E - Toggle Emotion Detection")
         print("   A - Toggle Unknown Alerts")
-        print("   + - Increase Detection Threshold")
-        print("   - - Decrease Detection Threshold\n")
-        print("💡 Confidence Bar: Green (full) = Perfect Match, Red (empty) = Poor Match\n")
+        print("   ] - Increase Recognition Strictness (lower threshold)")
+        print("   [ - Decrease Recognition Strictness (higher threshold)")
+        print("\n💡 Confidence Bar: Green (full) = Perfect Match, Red (empty) = Poor Match")
+        print("💡 Recognition Threshold: Lower = More Strict (current: {:.0f})\n".format(
+            self.settings['recognition_threshold']))
         
         face_tracker = {}  # Track faces across frames
         next_face_id = 0
@@ -424,12 +426,14 @@ class FaceRecognition:
             elif key == ord('a'):
                 self.settings['alert_unknown'] = not self.settings['alert_unknown']
                 print(f"Unknown alerts: {'ON' if self.settings['alert_unknown'] else 'OFF'}")
-            elif key == ord('+') or key == ord('='):
-                self.settings['detection_threshold'] = min(0.9, self.settings['detection_threshold'] + 0.05)
-                print(f"Detection threshold: {self.settings['detection_threshold']:.2f}")
-            elif key == ord('-') or key == ord('_'):
-                self.settings['detection_threshold'] = max(0.1, self.settings['detection_threshold'] - 0.05)
-                print(f"Detection threshold: {self.settings['detection_threshold']:.2f}")
+            elif key == ord(']'):
+                # Make recognition MORE strict (lower threshold)
+                self.settings['recognition_threshold'] = max(30, self.settings['recognition_threshold'] - 5)
+                print(f"Recognition threshold: {self.settings['recognition_threshold']:.0f} (more strict)")
+            elif key == ord('['):
+                # Make recognition LESS strict (higher threshold)
+                self.settings['recognition_threshold'] = min(120, self.settings['recognition_threshold'] + 5)
+                print(f"Recognition threshold: {self.settings['recognition_threshold']:.0f} (less strict)")
         
         # Cleanup
         if self.is_recording:

@@ -98,14 +98,15 @@ python main.py
 | Key | Action |
 |-----|--------|
 | `Q` | Quit application |
-| `S` | Take screenshot (saved to `screenshots/`) |
-| `R` | Toggle video recording (saved to `recordings/`) |
-| `L` | Toggle face landmarks display |
+| `S` | Take screenshot |
+| `R` | Toggle video recording |
+| `L` | Toggle face landmarks |
 | `C` | Toggle confidence bars |
-| `T` | Toggle statistics panel |
-| `A` | Toggle unknown face alerts |
-| `+` | Increase detection threshold |
-| `-` | Decrease detection threshold |
+| `T` | Toggle stats panel |
+| `E` | Toggle emotion detection |
+| `A` | Toggle unknown alerts |
+| `]` | Make recognition MORE strict (fewer false positives) |
+| `[` | Make recognition LESS strict (more lenient) |
 
 </details>
 
