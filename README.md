@@ -1,4 +1,4 @@
-# Face Recognition System
+# Face Recognition System 🍂
 
 > A lightweight, dependency-free face recognition system powered by OpenCV's DNN module.
 
@@ -10,6 +10,10 @@
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 </div>
+
+## About
+
+A small Python project that detects and recognizes faces from a webcam or still images using only OpenCV and NumPy on the CPU. It is aimed at students and hobbyists who want a readable example of OpenCV's DNN face detector combined with LBPH recognition. It is a learning project of a few hundred lines, not a library or a product.
 
 ## Table of Contents
 - [Features](#features)
